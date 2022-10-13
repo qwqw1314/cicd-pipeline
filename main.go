@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	fmt.Println("cicd-pipeline ex")
+	fmt.Println("cicd-pipeline ex2")
 }
