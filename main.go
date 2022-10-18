@@ -20,9 +20,9 @@ func main() {
 	for fileScanner.Scan() {
 		line := fileScanner.Text()
 		words := strings.Split(line, " ")
-		if len(words) >= 3 {
+		if len(words) >= 4 {
 			splitWord := strings.Split(words[3], ",")
-			if len(splitWord) >= 3 {
+			if len(splitWord) >= 4 {
 				var upperLayer string
 				if strings.Contains(splitWord[3], "upperlayer") {
 					upperLayer = splitWord[3]
