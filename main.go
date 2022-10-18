@@ -21,7 +21,10 @@ func main() {
 		line := fileScanner.Text()
 		words := strings.Split(line, " ")
 		splitWord := strings.Split(words[3], ",")
-		upperLayer := splitWord[3]
+		var upperLayer string
+		if strings.Contains(splitWord[3], "upperlayer") {
+			upperLayer = splitWord[3]
+		}
 		fmt.Println(upperLayer)
 	}
 }
