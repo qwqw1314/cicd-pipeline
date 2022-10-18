@@ -1,11 +1,27 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"time"
+	"os"
+	"strings"
 )
 
 func main() {
-	fmt.Println("cicd-pipeline ex9")
-	time.Sleep(time.Hour * 24)
+	readFile, err := os.Open("/rootfs/proc/1/mounts")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fileScanner := bufio.NewScanner(readFile)
+	fileScanner.Split(bufio.ScanLines)
+
+	for fileScanner.Scan() {
+		line := fileScanner.Text()
+		words := strings.Split(line, " ")
+		splitWord := strings.Split(words[3], ",")
+		upperLayer := splitWord[3]
+		fmt.Println(upperLayer)
+	}
 }
