@@ -24,8 +24,9 @@ func main() {
 			splitWord := strings.Split(words[3], ",")
 			if len(splitWord) >= 4 {
 				var upperLayer string
-				if strings.Contains(splitWord[3], "upperlayer") {
+				if strings.Contains(splitWord[3], "upperdir") {
 					upperLayer = splitWord[3]
+					fmt.Println(upperLayer)
 				}
 				fmt.Println(upperLayer)
 			}
