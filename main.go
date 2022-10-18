@@ -28,7 +28,6 @@ func main() {
 					upperLayer = splitWord[3]
 					fmt.Println(upperLayer)
 				}
-				fmt.Println(upperLayer)
 			}
 		}
 	}
