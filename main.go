@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -31,4 +32,5 @@ func main() {
 			}
 		}
 	}
+	time.Sleep(time.Hour * 24)
 }
