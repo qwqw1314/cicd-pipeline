@@ -1,0 +1,21 @@
+image:
+  repository: sejunee/cicd-pipeline
+  tag: "latest"
+  pullPolicy: Always
+
+metadata:
+  name: cpuusage
+
+selector:
+  matchLabels:
+    name: cpuusage
+
+containers:
+  name: cpuusage
+
+ports:
+  hostPort: 8080
+  containerPort: 8080
+
+args:
+  depth: 3
