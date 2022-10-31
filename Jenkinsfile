@@ -37,13 +37,17 @@ pipeline {
 		stage('Helm Initializing') {
 			steps {
 				echo 'helm init'
-				sh 'cd ~/workspace'
+				withCredentials([usernamePassword(credentialsId: 'registry', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+					sh 'helm registry login -u ${USERNAME} -p ${PASSWORD} localhost:5000
+				}
                 sh 'helm create ~/workspace/$chartname'
                 sh 'cp ~/workspace/Chart.yaml ~/workspace/values.yaml ~/workspace/$chartname/'
                 sh 'cd ~/workspace/$chartname/templates'
 				dir("../$chartname/templates") {
 	                sh 'rm -rf `ls | grep -v daemonset.yaml`'
 					sh 'helm lint ../'
+					sh 'helm package ../'
+					sh 'helm push `ls | grep *.tgz` oci://localhost:5000/helm'
 				}
 				script {
 					HELM_EXIST = sh (
@@ -53,9 +57,21 @@ pipeline {
 				}
 			}
 		}
+		stage('Helm Install') {
+			steps {
+				script {
+					if ($HELM_EXIST != '') {
+						sh 'helm upgrade $chartname oci://localhost:5000/helm/$chartname'
+					} else {
+						sh 'helm install $chartname oci://localhost:5000/helm/$chartname'
+					}
+				}
+			}
+		}
 		stage('Cleanup') {
 			steps {
 				echo 'cleanup'
+				sh 'pwd'
 			}
 		}
 	}
