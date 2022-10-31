@@ -1,12 +1,13 @@
 pipeline {
 	environment {
 		repository = 'sejunee/cicd-pipeline'
-		kubeceonfig = credentials('kubeconfig')
+		kubeconfig = credentials('kubeconfig')
 	}
     agent any
 	stages {
-		stage('Set Envirionment') {
+		stage('Set Environment') {
 			steps {
+				echo 'set env'
 				git branch: 'master', url: 'https://github.com/qwqw1314/cicd-pipeline.git'
 				sh 'mkdir -p ~/workspace/binary/'
 				sh 'mkdir -p ~/workspace/$hname/templates'
@@ -17,6 +18,7 @@ pipeline {
 		}
 		stage('Build') {
 			steps {
+				echo 'build'
 				git branch: 'main', url: 'https://github.com/qwqw1314/build-image.git'
 				sh 'go mod tidy'
 				sh 'go build .'
@@ -27,13 +29,54 @@ pipeline {
 			}
 		}
 		stage('Docker Upload') {
+			echo 'docker upload'
 			steps {
 				sh 'docker push $repository:latest'
 			}
 		}
-		stage('Deploy') {
+		stage('Helm Initializing') {
 			steps {
-				sh 'echo Deploy'
+				echo 'helm init'
+				sh 'cd ~/workspace'
+                sh 'helm create daemonset'
+                sh 'cp $chartpwd $valuepwd ./daemonset/'
+                sh 'cd ~/workspace/daemonset/templates'
+                sh 'rm -rf `ls | grep -v daemonset.yaml`'
+                sh 'cd ../'
+				sh 'helm lint'
+				helm_exist = sh (
+					script: 'helm list | grep daemonset',
+					returnStdout: true
+				)
+				sh 'mkdir -p ~/.kube/'
+				sh 'cp $kubeconfig ~/.kube/'
+			}
+		}
+		stage('Helm Install') {
+			when {
+				expression {
+					return $helm_exist == '';
+				}
+			}
+			steps {
+				echo 'helm install'
+
+			}
+		}
+		stage('Helm Upgrade') {
+			when {
+				expression {
+					return $helm_exist != '';
+				}
+			}
+			steps {
+				echo 'helm upgrade'
+
+			}
+		}
+		stage('Cleanup') {
+			steps {
+				echo 'cleanup'
 			}
 		}
 	}
