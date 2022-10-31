@@ -7,8 +7,8 @@ pipeline {
 	stages {
 		stage('Set Envirionment') {
 			steps {
-                sh 'mkdir -p ~/workspace/binary/'
-
+				git branch: 'master', url: 'https://github.com/qwqw1314/cicd-pipeline.git'
+				sh 'mkdir -p ~/workspace/binary/'
 				sh 'tname=`grep name: Chart.yaml`'
 				sh 'tversion=`grep version: Chart.yaml`'
 				sh 'hname=`echo $tname | cut -d ':' -f 2- | cut -d ' ' -f 2`'
