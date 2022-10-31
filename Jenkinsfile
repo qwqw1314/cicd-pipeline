@@ -70,7 +70,7 @@ pipeline {
 			steps {
 				echo 'cleanup'
 				dir('../') {
-					rm -rf *
+					sh 'rm -rf *'
 				}
 			}
 		}
