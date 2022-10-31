@@ -29,8 +29,8 @@ pipeline {
 			}
 		}
 		stage('Docker Upload') {
-			echo 'docker upload'
 			steps {
+				echo 'image upload'
 				sh 'docker push $repository:latest'
 			}
 		}
@@ -44,10 +44,10 @@ pipeline {
                 sh 'rm -rf `ls | grep -v daemonset.yaml`'
                 sh 'cd ../'
 				sh 'helm lint'
-				helm_exist = sh (
+				HELM_EXIST = sh (
 					script: 'helm list | grep daemonset',
 					returnStdout: true
-				)
+				).trim()
 				sh 'mkdir -p ~/.kube/'
 				sh 'cp $kubeconfig ~/.kube/'
 			}
@@ -55,7 +55,7 @@ pipeline {
 		stage('Helm Install') {
 			when {
 				expression {
-					return $helm_exist == '';
+					return $HELM_EXIST == '';
 				}
 			}
 			steps {
@@ -66,7 +66,7 @@ pipeline {
 		stage('Helm Upgrade') {
 			when {
 				expression {
-					return $helm_exist != '';
+					return $HELM_EXIST != '';
 				}
 			}
 			steps {
