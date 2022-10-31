@@ -39,7 +39,7 @@ pipeline {
 				echo 'helm init'
 				sh 'cd ~/workspace'
                 sh 'helm create daemonset'
-                sh 'cp $chartpwd $valuepwd ./daemonset/'
+                sh 'cp ${chartpwd} ${valuepwd} ./daemonset/'
                 sh 'cd ~/workspace/daemonset/templates'
                 sh 'rm -rf `ls | grep -v daemonset.yaml`'
                 sh 'cd ../'
