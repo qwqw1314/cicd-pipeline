@@ -59,9 +59,9 @@ pipeline {
 						returnStdout: true
 					)
 					if (HELM_EXIST != '') {
-						sh 'helm upgrade $chartname oci://localhost:5000/helm/$chartname'
+						sh 'helm upgrade --kubeconfig=${kubeconfig} $chartname oci://localhost:5000/helm/$chartname'
 					} else {
-						sh 'helm install $chartname oci://localhost:5000/helm/$chartname'
+						sh 'helm install --kubeconfig=${kubeconfig} $chartname oci://localhost:5000/helm/$chartname'
 					}
 				}
 			}
