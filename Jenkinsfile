@@ -49,12 +49,6 @@ pipeline {
 					sh 'helm package ../'
 					sh 'helm push `ls | grep *.tgz` oci://localhost:5000/helm'
 				}
-				script {
-					HELM_EXIST = sh (
-						script: 'helm list --kubeconfig=${kubeconfig} | grep $chartname',
-						returnStdout: true
-					)
-				}
 			}
 		}
 		stage('Helm Install') {
@@ -64,7 +58,7 @@ pipeline {
                         script: 'helm list --kubeconfig=${kubeconfig} | grep $chartname',
 						returnStdout: true
 					)
-					if ($HELM_EXIST != '') {
+					if (${HELM_EXIST} != '') {
 						sh 'helm upgrade $chartname oci://localhost:5000/helm/$chartname'
 					} else {
 						sh 'helm install $chartname oci://localhost:5000/helm/$chartname'
