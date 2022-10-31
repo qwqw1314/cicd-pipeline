@@ -38,7 +38,7 @@ pipeline {
 			steps {
 				echo 'helm init'
 				withCredentials([usernamePassword(credentialsId: 'registry', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-					sh 'helm registry login -u ${USERNAME} -p ${PASSWORD} localhost:5000
+					sh 'helm registry login -u ${USERNAME} -p ${PASSWORD} localhost:5000'
 				}
                 sh 'helm create ~/workspace/$chartname'
                 sh 'cp ~/workspace/Chart.yaml ~/workspace/values.yaml ~/workspace/$chartname/'
