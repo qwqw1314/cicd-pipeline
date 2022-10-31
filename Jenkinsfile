@@ -69,7 +69,9 @@ pipeline {
 		stage('Cleanup') {
 			steps {
 				echo 'cleanup'
-				sh 'pwd'
+				dir('../') {
+					rm -rf *
+				}
 			}
 		}
 	}
