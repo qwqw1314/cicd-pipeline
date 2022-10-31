@@ -20,7 +20,7 @@ pipeline {
 				git branch: 'main', url: 'https://github.com/qwqw1314/build-image.git'
 				withCredentials([usernamePassword(credentialsId: 'sejunee', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
 					sh 'docker login -u ${USERNAME} -p ${PASSWORD}'
-					sh 'docker build -t sejunee/cicd-pipeline:latest'
+					sh 'docker build -t sejunee/cicd-pipeline:latest .'
 					sh 'docker push sejunee/cicd-pipeline:latest'
 				}
 			}
