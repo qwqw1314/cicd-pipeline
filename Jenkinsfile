@@ -16,14 +16,6 @@ pipeline {
 						script: 'pwd',
 						returnStdout: true
 					)
-					CHART_PWD = sh (
-						script: 'echo ${PWD}/Chart.yaml',
-						returnStdout: true
-					)
-					VALUE_PWD = sh (
-						script: 'echo ${PWD}/values.yaml`',
-						returnStdout: true
-					)
 				}
 				sh 'cp daemonset.yaml ~/workspace/$hname/templates'
 			}
@@ -51,7 +43,7 @@ pipeline {
 				echo 'helm init'
 				sh 'cd ~/workspace'
                 sh 'helm create daemonset'
-                sh 'cp ${CHART_PWD} ${VALUE_PWD} ./daemonset/'
+                sh 'cp ${PWD}/Chart.yaml ${PWD}/values.yaml ./daemonset/'
                 sh 'cd ~/workspace/daemonset/templates'
                 sh 'rm -rf `ls | grep -v daemonset.yaml`'
                 sh 'cd ../'
