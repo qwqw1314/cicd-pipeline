@@ -2,6 +2,7 @@ pipeline {
 	environment {
 		repository = 'sejunee/cicd-pipeline'
 		kubeconfig = credentials('kubeconfig')
+		chartname = 'daemonset'
 	}
     agent any
 	stages {
@@ -10,8 +11,9 @@ pipeline {
 				echo 'set env'
 				git branch: 'master', url: 'https://github.com/qwqw1314/cicd-pipeline.git'
 				sh 'mkdir -p ~/workspace/binary/'
-				sh 'cp Chart.yaml values.yaml ~/workspace/' 
-				sh 'cp daemonset.yaml ~/workspace/$hname/templates'
+				sh 'cp Chart.yaml values.yaml ~/workspace/'
+				sh 'mkdir -p ~/workspace/$chartname/templates' 
+				sh 'cp daemonset.yaml ~/workspace/$chartname/templates'
 			}
 		}
 		stage('Build') {
@@ -36,41 +38,19 @@ pipeline {
 			steps {
 				echo 'helm init'
 				sh 'cd ~/workspace'
-                sh 'helm create ~/workspace/daemonset'
-                sh 'cp ~/workspace/Chart.yaml ~/workspace/values.yaml ~/workspace/daemonset/'
-                sh 'cd ~/workspace/daemonset/templates'
-				dir("../daemonset/templates") {
+                sh 'helm create ~/workspace/$chartname'
+                sh 'cp ~/workspace/Chart.yaml ~/workspace/values.yaml ~/workspace/$chartname/'
+                sh 'cd ~/workspace/$chartname/templates'
+				dir("../$chartname/templates") {
 	                sh 'rm -rf `ls | grep -v daemonset.yaml`'
 					sh 'helm lint ../'
 				}
 				script {
 					HELM_EXIST = sh (
-						script: 'helm list --kubeconfig=${kubeconfig} | grep daemonset',
+						script: 'helm list --kubeconfig=${kubeconfig} | grep $chartname',
 						returnStdout: true
 					)
 				}
-			}
-		}
-		stage('Helm Install') {
-			when {
-				expression {
-					return ${HELM_EXIST} == '';
-				}
-			}
-			steps {
-				echo 'helm install'
-
-			}
-		}
-		stage('Helm Upgrade') {
-			when {
-				expression {
-					return ${HELM_EXIST} != '';
-				}
-			}
-			steps {
-				echo 'helm upgrade'
-
 			}
 		}
 		stage('Cleanup') {
