@@ -44,10 +44,12 @@ pipeline {
                 sh 'rm -rf `ls | grep -v daemonset.yaml`'
                 sh 'cd ../'
 				sh 'helm lint'
-				HELM_EXIST = sh (
-					script: 'helm list | grep daemonset',
-					returnStdout: true
-				).trim()
+				script {
+					HELM_EXIST = sh (
+						script: 'helm list | grep daemonset',
+						returnStdout: true
+					)
+				}
 				sh 'mkdir -p ~/.kube/'
 				sh 'cp $kubeconfig ~/.kube/'
 			}
@@ -55,7 +57,7 @@ pipeline {
 		stage('Helm Install') {
 			when {
 				expression {
-					return $HELM_EXIST == '';
+					return ${HELM_EXIST} == '';
 				}
 			}
 			steps {
@@ -66,7 +68,7 @@ pipeline {
 		stage('Helm Upgrade') {
 			when {
 				expression {
-					return $HELM_EXIST != '';
+					return ${HELM_EXIST} != '';
 				}
 			}
 			steps {
