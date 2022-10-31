@@ -54,11 +54,11 @@ pipeline {
 		stage('Helm Install') {
 			steps {
 				script {
-					def HELM_EXIST = sh (
-                        script: 'helm list --kubeconfig=${kubeconfig} | grep $chartname',
+					String out = sh (
+                        script: 'helm list --kubeconfig=${kubeconfig}',
 						returnStdout: true
 					)
-					if (HELM_EXIST != NULL) {
+					if (out.contains("$chartname")) {
 						sh 'helm upgrade --kubeconfig=${kubeconfig} $chartname oci://localhost:5000/helm/$chartname'
 					} else {
 						sh 'helm install --kubeconfig=${kubeconfig} $chartname oci://localhost:5000/helm/$chartname'
