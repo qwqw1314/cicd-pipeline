@@ -58,8 +58,7 @@ pipeline {
                         script: 'helm list --kubeconfig=${kubeconfig} | grep $chartname',
 						returnStdout: true
 					)
-					echo HELM_EXIST
-					if (HELM_EXIST != '') {
+					if (HELM_EXIST != NULL) {
 						sh 'helm upgrade --kubeconfig=${kubeconfig} $chartname oci://localhost:5000/helm/$chartname'
 					} else {
 						sh 'helm install --kubeconfig=${kubeconfig} $chartname oci://localhost:5000/helm/$chartname'
