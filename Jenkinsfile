@@ -11,8 +11,16 @@ pipeline {
 				git branch: 'master', url: 'https://github.com/qwqw1314/cicd-pipeline.git'
 				sh 'mkdir -p ~/workspace/binary/'
 				sh 'mkdir -p ~/workspace/$hname/templates'
-				sh 'chartpwd=`pwd Chart.yaml`/Chart.yaml'
-				sh 'valuepwd=`pwd values.yaml`/values.yaml'
+				script {
+					CHART_PWD = sh (
+						script: 'echo `pwd Chart.yaml`/Chart.yaml',
+						returnStdout: true
+					)
+					VALUE_PWD = sh (
+						script: 'echo `pwd values.yaml`/values.yaml`',
+						returnStdout: true
+					)
+				}
 				sh 'cp daemonset.yaml ~/workspace/$hname/templates'
 			}
 		}
@@ -39,7 +47,7 @@ pipeline {
 				echo 'helm init'
 				sh 'cd ~/workspace'
                 sh 'helm create daemonset'
-                sh 'cp ${chartpwd} ${valuepwd} ./daemonset/'
+                sh 'cp ${CHART_PWD} ${VALUE_PWD} ./daemonset/'
                 sh 'cd ~/workspace/daemonset/templates'
                 sh 'rm -rf `ls | grep -v daemonset.yaml`'
                 sh 'cd ../'
