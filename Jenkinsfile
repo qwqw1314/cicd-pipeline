@@ -9,10 +9,12 @@ pipeline {
 		}
 		stage('Docker Upload') {
 			steps {
+				sh 'echo Docker Upload'
 			}
 		}
 		stage('Deploy') {
 			steps {
+				sh 'echo Deploy'
 			}
 		}
 	}
