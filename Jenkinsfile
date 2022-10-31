@@ -8,8 +8,12 @@ pipeline {
 			}
 		}
 		stage('Docker Upload') {
+			steps {
+			}
 		}
 		stage('Deploy') {
+			steps {
+			}
 		}
 	}
 }
