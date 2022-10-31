@@ -12,12 +12,16 @@ pipeline {
 				sh 'mkdir -p ~/workspace/binary/'
 				sh 'mkdir -p ~/workspace/$hname/templates'
 				script {
+					PWD = sh (
+						script: 'pwd',
+						returnStdout: true
+					)
 					CHART_PWD = sh (
-						script: 'echo `pwd`/Chart.yaml',
+						script: 'echo ${PWD}/Chart.yaml',
 						returnStdout: true
 					)
 					VALUE_PWD = sh (
-						script: 'echo `pwd`/values.yaml`',
+						script: 'echo ${PWD}/values.yaml`',
 						returnStdout: true
 					)
 				}
