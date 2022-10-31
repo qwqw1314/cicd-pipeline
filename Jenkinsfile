@@ -1,7 +1,7 @@
 pipeline {
 	environment {
 		repository = 'sejunee/cicd-pipeline'
-
+		kubeceonfig = credentials('kubeconfig')
 	}
     agent any
 	stages {
@@ -23,13 +23,12 @@ pipeline {
 				withCredentials([usernamePassword(credentialsId: 'sejunee', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
 					sh 'docker login -u ${USERNAME} -p ${PASSWORD}'
 					sh 'docker build -t $repository:latest .'
-					sh 'docker push $repository:latest'
 				}
 			}
 		}
 		stage('Docker Upload') {
 			steps {
-				sh 'echo Docker Upload'
+				sh 'docker push $repository:latest'
 			}
 		}
 		stage('Deploy') {
