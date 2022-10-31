@@ -18,10 +18,12 @@ pipeline {
 		stage('Build') {
 			steps {
 				git branch: 'main', url: 'https://github.com/qwqw1314/build-image.git'
+				sh 'go mod tidy'
+				sh 'go build .'
 				withCredentials([usernamePassword(credentialsId: 'sejunee', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
 					sh 'docker login -u ${USERNAME} -p ${PASSWORD}'
-					sh 'docker build -t sejunee/cicd-pipeline:latest .'
-					sh 'docker push sejunee/cicd-pipeline:latest'
+					sh 'docker build -t $repository:latest .'
+					sh 'docker push $repository:latest'
 				}
 			}
 		}
