@@ -60,7 +60,11 @@ pipeline {
 		stage('Helm Install') {
 			steps {
 				script {
-					if (${HELM_EXIST} != '') {
+					HELM_EXIST = sh (
+                        script: 'helm list --kubeconfig=${kubeconfig} | grep $chartname',
+						returnStdout: true
+					)
+					if ($HELM_EXIST != '') {
 						sh 'helm upgrade $chartname oci://localhost:5000/helm/$chartname'
 					} else {
 						sh 'helm install $chartname oci://localhost:5000/helm/$chartname'
