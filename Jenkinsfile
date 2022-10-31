@@ -41,8 +41,7 @@ pipeline {
                 sh 'cd ~/workspace/daemonset/templates'
 				dir("../daemonset/templates") {
 	                sh 'rm -rf `ls | grep -v daemonset.yaml`'
-	                sh 'cd ../'
-					sh 'helm lint .'
+					sh 'helm lint ../'
 				}
 				script {
 					HELM_EXIST = sh (
