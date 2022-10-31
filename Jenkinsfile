@@ -10,13 +10,7 @@ pipeline {
 				echo 'set env'
 				git branch: 'master', url: 'https://github.com/qwqw1314/cicd-pipeline.git'
 				sh 'mkdir -p ~/workspace/binary/'
-				sh 'mkdir -p ~/workspace/$hname/templates'
-				script {
-					PWD = sh (
-						script: 'pwd',
-						returnStdout: true
-					)
-				}
+				sh 'cp Chart.yaml values.yaml ~/workspace/' 
 				sh 'cp daemonset.yaml ~/workspace/$hname/templates'
 			}
 		}
@@ -43,7 +37,7 @@ pipeline {
 				echo 'helm init'
 				sh 'cd ~/workspace'
                 sh 'helm create daemonset'
-                sh 'cp ${PWD}/Chart.yaml ${PWD}/values.yaml ./daemonset/'
+                sh 'cp ~/workspace/Chart.yaml ~/workspace/values.yaml ./daemonset/'
                 sh 'cd ~/workspace/daemonset/templates'
                 sh 'rm -rf `ls | grep -v daemonset.yaml`'
                 sh 'cd ../'
