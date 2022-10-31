@@ -49,7 +49,7 @@ pipeline {
 						returnStdout: true
 					)
 				}
-				echo '$HOME'
+				sh 'pwd'	
 				sh 'mkdir -p ~/.kube/'
 				sh 'cp $kubeconfig ~/.kube/'
 			}
