@@ -13,11 +13,11 @@ pipeline {
 				sh 'mkdir -p ~/workspace/$hname/templates'
 				script {
 					CHART_PWD = sh (
-						script: 'echo `pwd Chart.yaml`/Chart.yaml',
+						script: 'echo `pwd`/Chart.yaml',
 						returnStdout: true
 					)
 					VALUE_PWD = sh (
-						script: 'echo `pwd values.yaml`/values.yaml`',
+						script: 'echo `pwd`/values.yaml`',
 						returnStdout: true
 					)
 				}
