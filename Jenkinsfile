@@ -45,13 +45,10 @@ pipeline {
 				}
 				script {
 					HELM_EXIST = sh (
-						script: 'helm list | grep daemonset',
+						script: 'helm list --kubeconfig=${kubeconfig} | grep daemonset',
 						returnStdout: true
 					)
 				}
-				sh 'pwd'	
-				sh 'mkdir -p ~/.kube/'
-				sh 'cp $kubeconfig ~/.kube/'
 			}
 		}
 		stage('Helm Install') {
