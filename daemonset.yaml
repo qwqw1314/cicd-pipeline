@@ -34,11 +34,6 @@ spec:
         - name: snapshots
           mountPath: /rootfs/snapshots
           readOnly: true
-        ports:
-          - name: http
-            hostPort: {{ .Values.ports.hostPort }}
-            containerPort: {{ .Values.ports.containerPort }}
-            protocol: TCP
       volumes:
       - name: proc
         hostPath:

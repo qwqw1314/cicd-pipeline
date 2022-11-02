@@ -14,7 +14,6 @@ pipeline {
 				sh 'cp Chart.yaml values.yaml ~/workspace/'
 				sh 'mkdir -p ~/workspace/$chartname/templates' 
 				sh 'cp daemonset.yaml ~/workspace/$chartname/templates'
-				sh 'kubectl label namespace default istio-injection=enabled --kubeconfig=${kubeconfig}'
 			}
 		}
 		stage('Build') {
